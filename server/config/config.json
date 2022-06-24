@@ -1,0 +1,36 @@
+{
+  "listeningPort" : "443",
+  "listeningHost" : "0.0.0.0",
+
+  "fileTracker" : "wss://tracker.openwebtorrent.com",
+
+  "tls" : {
+    "cert" : "./certs/edumeet-demo-cert.pem",
+    "key"  : "./certs/edumeet-demo-key.pem"
+  },
+
+
+  "redisOptions": {
+    "host" : "127.0.0.1",
+    "port" : "6379",
+    "password" : ""
+  },
+
+  "prometheus" : {
+      "enabled" : "false",
+      "deidentify" : "true",
+      "numeric" : "true",
+      "listen" : "127.0.0.1"
+  },
+
+  "mediasoup" : {
+      "webRtcTransport" : {
+        "listenIps" : [
+          {
+            "ip": "0.0.0.0",
+            "announcedIp" : "127.0.0.1"
+          }
+        ]
+      }
+  }
+}
