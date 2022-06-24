@@ -33,6 +33,7 @@ const mediasoup = require('mediasoup');
 const AwaitQueue = require('awaitqueue');
 const base64 = require('base-64');
 const helmet = require('helmet');
+var cors = require('cors');
 // auth
 const passport = require('passport');
 const LTIStrategy = require('passport-lti');
@@ -52,7 +53,6 @@ if (configError)
 	console.error(`Invalid config file: ${configError}`);
 	process.exit(-1);
 }
-
 const redisClient = redis.createClient(config.redisOptions);
 
 /* eslint-disable no-console */
@@ -100,8 +100,8 @@ const tls =
 };
 
 const app = express();
-
-app.use(helmet.hsts());
+app.use(cors());
+// app.use(helmet.hsts());
 const sharedCookieParser = cookieParser();
 
 app.use(sharedCookieParser);
@@ -868,6 +868,7 @@ async function runMediasoupWorkers()
 
 			router.observer.on('newtransport', (transport) =>
 			{
+				console.log("new transport");
 				transport.appData.producers = new Map();
 				transport.appData.consumers = new Map();
 				transport.appData.dataProducers = new Map();
@@ -882,6 +883,7 @@ async function runMediasoupWorkers()
 
 				transport.observer.on('newproducer', (producer) =>
 				{
+					console.log("new porducer");
 					producer.appData.transport = transport;
 					transport.appData.producers.set(producer.id, producer);
 					router.appData.producers.set(producer.id, producer);
@@ -889,6 +891,7 @@ async function runMediasoupWorkers()
 
 					producer.observer.on('close', () =>
 					{
+						console.log('procuder close');
 						transport.appData.producers.delete(producer.id);
 						router.appData.producers.delete(producer.id);
 						worker.appData.producers.delete(producer.id);
